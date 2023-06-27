@@ -3,15 +3,16 @@ import { loadStripe } from '@stripe/stripe-js';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useMemo } from 'react';
 import CheckoutPage from './payment/page';
+import https from '@/services/https';
 
 type HomeComponent = {
-  pulishableKey: string;
+  publishableKey: string;
 };
 
 export const getServerSideProps: GetServerSideProps<{
   homeProps: HomeComponent;
 }> = async () => {
-  const res = await fetch('/api/payment/config');
+  const res = await fetch('https://jsonplaceholder.typicode.com/posts');
   const homeProps = await res.json();
   return { props: { homeProps } };
 };
@@ -19,17 +20,18 @@ export const getServerSideProps: GetServerSideProps<{
 export default function Home({
   homeProps,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const stripePromise = useMemo(
-    () => loadStripe(homeProps.pulishableKey),
-    [homeProps.pulishableKey]
-  );
+  console.log({ homeProps });
+  // const stripePromise = useMemo(
+  //   () => loadStripe(homeProps.publishableKey),
+  //   [homeProps.publishableKey]
+  // );
 
   return (
     <>
-      <main>Public key: {homeProps.pulishableKey}</main>
-      <Elements stripe={stripePromise}>
-        <CheckoutPage />
-      </Elements>
+      {/* <main>Public key: {homeProps.publishableKey}</main> */}
+      {/* <Elements stripe={stripePromise}> */}
+      <CheckoutPage />
+      {/* </Elements> */}
     </>
   );
 }
